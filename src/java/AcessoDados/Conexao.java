@@ -19,10 +19,10 @@ public class Conexao {
     protected Statement stmt;
     private final String serverName = "localhost";
     private final String portNumber = "3306";
-    private final String databaseName = "CrowTable";
+    private final String databaseName = "crowtable";
     private final String url = "jdbc:mysql://localhost:3306/" + databaseName;
     private final String userName = "root";
-    private final String password = "221493";
+    private final String password = "";
     private String errString;
     
     
