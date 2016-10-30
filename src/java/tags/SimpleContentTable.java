@@ -5,7 +5,12 @@
  */
 package tags;
 
+import AcessoDados.AcessoDados;
+import classes.Clientes;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
@@ -13,49 +18,51 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
  *
  * @author Wylianne
  */
-public class SimpleContentTable extends SimpleTagSupport{
+public class SimpleContentTable extends SimpleTagSupport {
+
+    String table_content = "";
     private String value;
 
     public void setValue(String value) {
         this.value = value;
     }
-    
-    
+
     @Override
-        public void doTag() throws IOException, JspException{
-            String[][] conteudo;
-            switch (value) {
-                case "5":
-                    conteudo = new String[3][2];
-                    conteudo[0][0] = "Wylianne";
-                    conteudo[0][1] = "999346862";
-                    conteudo[1][0] = "Paulo";
-                    conteudo[1][1] = "907337777";
-                    conteudo[2][0] = "Maria";
-                    conteudo[2][1] = "990731251";
-                    break;
-                default:
-                    conteudo = new String[1][3];
-                    conteudo[0][0] = "Wylianne";
-                    conteudo[0][1] = "09049013430"; 
-                    conteudo[0][2] = "wylianne@gmail.com";
-            }
-        String table_content="<tbody>";
-        
-        //Saber comprimento conteudo[0].length
-        for (int i = 0; i < conteudo.length; i++) {
-            if(conteudo[i][0] == ""){
-                break;
-            }
-            table_content += "<tr>";
-            for (int j = 0; j < conteudo[i].length; j++) {
-                table_content += "<td>"+conteudo[i][j]+"</td>";
-            }
-            table_content += "</tr>";
+    public void doTag() throws IOException, JspException {
+
+        try {
+            ResultSet res;
+            AcessoDados cliente = new AcessoDados();
+            int id = 0;
+            String cpf;
+            String nome;
+            String identidade;
+            String dataNascimento;
+            String escolaridade;
+            String endereco;
+            String telefone;
+            res = cliente.Lista();
+
+//            while (res.next()) {
+                id = res.getInt("id");
+                cpf = res.getString("cpf");
+                nome = res.getString("nome");
+                identidade = res.getString("identidade");
+                dataNascimento = res.getString("dataNascimento");
+                escolaridade = res.getString("escolaridade");
+                endereco = res.getString("endereco");
+                telefone = res.getString("telefone");
+
+                getJspContext().getOut().println("<tbody><tr>"
+                        + "<td width=\"10%\">" + cpf + "</td><td>" + nome + "</td><td width=\"20%\">" + identidade + "</td><td width=\"10%\">" + dataNascimento + "</td><td width=\"10%\">" + escolaridade + "</td><td width=\"10%\">" + endereco + "</td><td width=\"10%\">" + telefone + "</td><td width=\"10%\">Views</td>"
+                        + "</tr></tbody>");
+
+//            }
+        } catch (Exception ex) {
+            Logger.getLogger(Clientes.class.getName()).log(Level.SEVERE, null, ex);
+
         }
-        table_content += "</tbody>";
-        
-        getJspContext().getOut().println(table_content);        
+
     }
-    
+
 }
